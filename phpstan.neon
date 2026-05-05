@@ -1,0 +1,25 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+
+parameters:
+    level: 5
+    paths:
+        - app
+    excludePaths:
+        - app/Console/Commands/AppDemoCommand.php
+    reportUnmatchedIgnoredErrors: false
+    ignoreErrors:
+        - identifier: missingType.iterableValue
+        - identifier: missingType.generics
+        - identifier: argument.type
+          path: app/Http/Controllers/*Controller.php
+        - identifier: argument.type
+          path: app/Listeners/LogAuthenticationActivity.php
+        - identifier: property.notFound
+          path: app/Data/AuditLogs/*.php
+        - identifier: instanceof.alwaysFalse
+          path: app/Data/Users/UserDetailData.php
+        - identifier: trait.unused
+          path: app/Concerns/HasUuids.php
+        - identifier: generics.wrongParent
+          path: app/Models/User.php

@@ -1,0 +1,53 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: dev
+    container_name: laravel13_app
+    working_dir: /var/www
+    volumes:
+      - .:/var/www
+    ports:
+      - '8000:8000'
+    environment:
+      - DB_HOST=db
+      - DB_DATABASE=app
+      - DB_USERNAME=app
+      - DB_PASSWORD=secret
+      - REDIS_HOST=redis
+    depends_on:
+      - db
+      - redis
+    command: php artisan serve --host=0.0.0.0 --port=8000
+
+  vite:
+    image: node:22-alpine
+    container_name: laravel13_vite
+    working_dir: /var/www
+    volumes:
+      - .:/var/www
+    ports:
+      - '5173:5173'
+    command: sh -c "corepack enable && pnpm install && pnpm dev --host 0.0.0.0"
+
+  db:
+    image: postgres:16-alpine
+    container_name: laravel13_db
+    environment:
+      POSTGRES_DB: app
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: secret
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+
+  redis:
+    image: redis:7-alpine
+    container_name: laravel13_redis
+    ports:
+      - '6379:6379'
+
+volumes:
+  db_data:

@@ -1,0 +1,26 @@
+{
+    "extends": "@vue/tsconfig/tsconfig.dom.json",
+    "compilerOptions": {
+        "strict": true,
+        "ignoreDeprecations": "6.0",
+        "baseUrl": ".",
+        "paths": {
+            "@/*": ["resources/js/*"]
+        },
+        "types": ["vite/client", "node"],
+        "allowImportingTsExtensions": false,
+        "moduleResolution": "bundler",
+        "resolveJsonModule": true,
+        "esModuleInterop": true,
+        "isolatedModules": true,
+        "skipLibCheck": true,
+        "noEmit": true
+    },
+    "include": [
+        "resources/js/**/*.ts",
+        "resources/js/**/*.d.ts",
+        "resources/js/**/*.vue",
+        "vite.config.js"
+    ],
+    "exclude": ["node_modules", "vendor", "public"]
+}

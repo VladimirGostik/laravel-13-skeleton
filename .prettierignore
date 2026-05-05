@@ -1,0 +1,11 @@
+node_modules
+vendor
+public
+storage
+bootstrap/cache
+resources/js/types/generated.d.ts
+composer.lock
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+*.md

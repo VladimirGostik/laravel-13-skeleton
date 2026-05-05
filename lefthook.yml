@@ -1,0 +1,29 @@
+pre-commit:
+  parallel: true
+  commands:
+    pint:
+      glob: '*.php'
+      run: vendor/bin/pint {staged_files}
+      stage_fixed: true
+    phpstan:
+      glob: 'app/**/*.php'
+      run: vendor/bin/phpstan analyse {staged_files} --no-progress --memory-limit=2G
+    eslint:
+      glob: '*.{js,ts,vue}'
+      run: pnpm exec eslint --fix {staged_files}
+      stage_fixed: true
+    prettier:
+      glob: '*.{css,json,md}'
+      run: pnpm exec prettier --write {staged_files}
+      stage_fixed: true
+    typescript-transform:
+      glob: '{app/Data/**,app/Enums/**}/*.php'
+      run: php artisan typescript:transform && git add resources/js/types/generated.d.ts
+      stage_fixed: true
+
+pre-push:
+  commands:
+    typecheck:
+      run: pnpm exec vue-tsc --noEmit
+    tests:
+      run: php artisan test --parallel

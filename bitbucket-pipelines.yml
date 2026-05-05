@@ -1,0 +1,42 @@
+image: php:8.5-cli
+
+definitions:
+  caches:
+    composer: ~/.composer/cache
+    pnpm: ~/.local/share/pnpm/store
+
+  steps:
+    - step: &lint-and-test
+        name: Lint + Test
+        caches:
+          - composer
+          - pnpm
+          - node
+        script:
+          - apt-get update && apt-get install -y git unzip curl libpq-dev libzip-dev libicu-dev libpng-dev libonig-dev libxml2-dev
+          - docker-php-ext-install pdo_pgsql pgsql intl mbstring zip bcmath gd
+          - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+          - curl -fsSL https://get.pnpm.io/install.sh | env SHELL=bash sh -
+          - export PATH="$HOME/.local/share/pnpm:$PATH"
+          - composer install --no-interaction --prefer-dist --no-progress
+          - pnpm install --frozen-lockfile
+          - php artisan typescript:transform
+          - git diff --exit-code resources/js/types/generated.d.ts || (echo "Generated TS types out of sync — run pnpm generate-types and commit." && exit 1)
+          - vendor/bin/pint --test
+          - vendor/bin/phpstan analyse --no-progress --memory-limit=2G
+          - pnpm exec eslint resources/js/ vite.config.js
+          - pnpm exec prettier --check resources/js/ resources/css/ '*.{js,json}'
+          - pnpm exec vue-tsc --noEmit
+          - cp .env.example .env
+          - php artisan key:generate
+          - touch database/database.sqlite
+          - DB_CONNECTION=sqlite DB_DATABASE=database/database.sqlite php artisan migrate --force
+          - php artisan test
+          - pnpm build
+
+pipelines:
+  default:
+    - step: *lint-and-test
+  branches:
+    main:
+      - step: *lint-and-test
