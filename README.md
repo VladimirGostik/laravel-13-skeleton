@@ -2,7 +2,7 @@
 
 Production-grade base scaffold for **Laravel 13 + Inertia 2 + Vue 3 + TS + Tailwind 4 + DaisyUI 5** applications. Auth, RBAC (Spatie Permission), audit log (Spatie Activitylog), i18n (sk/en), Users + Roles management, app:demo command — all wired up.
 
-Built via `/inogile-dev-plugin:bootstrap` + the opinionated `commands/build-laravel-app.md` contract.
+Production-grade base scaffold built with opinionated conventions.
 
 ---
 
@@ -276,7 +276,7 @@ Image: `php:8.5-cli`. Caches: composer, pnpm, node.
 
 ## Tooling discoveries / gotchas
 
-Quirks discovered during bootstrap (also documented in `.claude/technical.md`):
+Quirks discovered during bootstrap:
 
 - **Laravel 13 Eloquent attributes** — `Fillable`, `Hidden`, `Visible`, `Appends`, `Table`, `Connection`, `DateFormat`, `ObservedBy`, `UseFactory`, `UsePolicy`, `Scope`, `ScopedBy` exist as PHP attributes. **`#[Cast]` does NOT** — keep using the `casts()` method.
 - **`spatie/laravel-data` × `spatie/typescript-transformer@^3` incompatibility** — `DataTypeScriptTransformer` references a removed `DtoTransformer` class. Workaround: use `AttributedClassTransformer` + `#[TypeScript]` on every DTO.
@@ -290,7 +290,7 @@ Quirks discovered during bootstrap (also documented in `.claude/technical.md`):
 
 ## Adding a business entity (Resource Recipe)
 
-For each new domain entity `Xxx`, run `/feature "<entity description>"` (or apply manually) — the recipe creates, in order:
+For each new domain entity `Xxx`, the recipe creates, in order:
 
 1. Migration → Model (with `LogsActivity` + scopes) → Factory → Seeder
 2. Enum(s) for finite states
@@ -304,8 +304,6 @@ For each new domain entity `Xxx`, run `/feature "<entity description>"` (or appl
 10. Sidebar nav entry in `AppLayout.vue` + `can` map in `HandleInertiaRequests`
 11. `php artisan typescript:transform` + `pnpm fix:js`
 12. Feature + unit tests
-
-See `commands/build-laravel-app.md` §11 for the full recipe.
 
 ---
 
@@ -321,18 +319,6 @@ See `commands/build-laravel-app.md` §11 for the full recipe.
 - ❌ Hard-coded user-visible strings (always `__('app.…')` / `t('…')`)
 - ❌ Vue `ref` for inter-component state or application logic (template refs only)
 - ❌ Changing `admin@example.com` / `password` demo invariant
-
----
-
-## Context for AI agents
-
-This repo is set up for the `inogile-dev-plugin` workflow:
-
-- `CLAUDE.md` — boost guidelines + project overrides (stack target, lint config, hard contracts)
-- `.claude/business.md` — roles, permissions, domain entities baseline
-- `.claude/technical.md` — architecture quirks, deployment status, CI pipeline
-
-Run `/feature "<feature>"` for new features, `/fix "<bug>"` for bugs, `/refactor "<scope>"` for refactors, `/review` before opening a PR. The pipeline routes to `architect-be-agent` / `architect-fe-agent` → `be-agent` / `fe-agent` → `tester-agent` → `reviewer-agent` → `docs-agent` automatically.
 
 ---
 
