@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import AppLayout from '@/Layouts/AppLayout.vue';
-import Header from '@/Layouts/Header.vue';
-import DataTable from '@/Layouts/DataTable.vue';
+import Header from '@/Components/Header.vue';
+import DataTable from '@/Components/DataTable.vue';
 import { Link } from '@inertiajs/vue3';
 import { useTranslate } from '@/Composables/useTranslate';
 import { useFilters } from '@/Composables/useFilters';
 import type { Paginator, TableColumn } from '@/types';
+
+defineOptions({ layout: AppLayout });
 
 const t = useTranslate();
 
@@ -50,30 +52,28 @@ const columns: TableColumn<ActivityRow>[] = [
 </script>
 
 <template>
-    <AppLayout>
-        <Header :title="t('audit_logs')" />
+    <Header :title="t('audit_logs')" />
 
-        <div class="card bg-base-100 border border-base-300 mb-4">
-            <div class="card-body">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <input v-model="filters['filter[search]']" :placeholder="t('search')" class="input input-bordered w-full" />
-                    <input v-model="filters['filter[date_from]']" type="date" class="input input-bordered w-full" />
-                    <input v-model="filters['filter[date_to]']" type="date" class="input input-bordered w-full" />
-                </div>
+    <div class="card bg-base-100 border border-base-300 mb-4">
+        <div class="card-body">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <input v-model="filters['filter[search]']" :placeholder="t('search')" class="input input-bordered w-full" />
+                <input v-model="filters['filter[date_from]']" type="date" class="input input-bordered w-full" />
+                <input v-model="filters['filter[date_to]']" type="date" class="input input-bordered w-full" />
             </div>
         </div>
+    </div>
 
-        <DataTable
-            :columns="columns"
-            :rows="logs"
-            :sort="filters.sort as string"
-            :per-page="Number(filters.perPage)"
-            @update:sort="(c) => setSort(c, filters.sort as string)"
-            @update:per-page="setPerPage"
-        >
-            <template #cell-id="{ row }">
-                <Link :href="route('audit-logs.show', row.id)" class="btn btn-xs btn-ghost">{{ t('view') }}</Link>
-            </template>
-        </DataTable>
-    </AppLayout>
+    <DataTable
+        :columns="columns"
+        :rows="logs"
+        :sort="filters.sort as string"
+        :per-page="Number(filters.perPage)"
+        @update:sort="(c) => setSort(c, filters.sort as string)"
+        @update:per-page="setPerPage"
+    >
+        <template #cell-id="{ row }">
+            <Link :href="route('audit-logs.show', row.id)" class="btn btn-xs btn-ghost">{{ t('view') }}</Link>
+        </template>
+    </DataTable>
 </template>

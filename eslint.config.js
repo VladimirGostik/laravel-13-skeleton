@@ -86,6 +86,14 @@ export default [
             'vue/no-v-text-v-html-on-component': 'off',
             'no-unused-vars': 'off',
             '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+            'no-restricted-syntax': [
+                'error',
+                {
+                    selector: "CallExpression[callee.name='ref']",
+                    message:
+                        "Do not use Vue 'ref' for inter-component state or application logic. Use props/emits, Inertia shared props, Pinia, or composables. 'ref' is allowed only for unavoidable imperative DOM access (template refs).",
+                },
+            ],
         },
     },
     prettier,

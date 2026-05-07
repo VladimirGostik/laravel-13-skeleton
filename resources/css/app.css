@@ -1,4 +1,44 @@
 @import 'tailwindcss';
+@plugin 'daisyui';
+
+@plugin 'daisyui/theme' {
+    name: 'app-theme';
+    default: true;
+    prefersdark: false;
+    color-scheme: light;
+
+    --color-base-100: oklch(100% 0 0);
+    --color-base-200: oklch(97% 0 0);
+    --color-base-300: oklch(94% 0 0);
+    --color-base-content: oklch(20% 0 0);
+    --color-primary: oklch(55% 0.2 264);
+    --color-primary-content: oklch(98% 0.01 264);
+    --color-secondary: oklch(65% 0.18 200);
+    --color-secondary-content: oklch(98% 0.01 200);
+    --color-accent: oklch(70% 0.2 150);
+    --color-accent-content: oklch(20% 0.04 150);
+    --color-neutral: oklch(30% 0.01 264);
+    --color-neutral-content: oklch(98% 0 0);
+    --color-info: oklch(70% 0.15 230);
+    --color-info-content: oklch(20% 0.03 230);
+    --color-success: oklch(70% 0.18 145);
+    --color-success-content: oklch(20% 0.04 145);
+    --color-warning: oklch(82% 0.18 80);
+    --color-warning-content: oklch(25% 0.04 80);
+    --color-error: oklch(65% 0.22 25);
+    --color-error-content: oklch(98% 0.02 25);
+
+    --radius-selector: 0.5rem;
+    --radius-field: 0.5rem;
+    --radius-box: 0.75rem;
+
+    --size-selector: 0.25rem;
+    --size-field: 0.25rem;
+
+    --border: 1px;
+    --depth: 1;
+    --noise: 0;
+}
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';

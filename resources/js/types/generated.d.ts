@@ -65,13 +65,13 @@ userRef: undefined | null,
 }
 namespace Roles {
 export type RoleDetailData = {
-id: number,
+id: string,
 name: string,
 is_system: boolean,
 permissions: string[],
 };
 export type RoleListItemData = {
-id: number,
+id: string,
 name: string,
 users_count: number,
 permissions_count: number,
@@ -89,7 +89,7 @@ permissions: string[],
 }
 namespace Users {
 export type UserDetailData = {
-id: number,
+id: string,
 name: string,
 email: string,
 role: string | null,
@@ -106,7 +106,7 @@ sort: undefined | string,
 perPage: number,
 };
 export type UserListItemData = {
-id: number,
+id: string,
 name: string,
 email: string,
 role: string | null,

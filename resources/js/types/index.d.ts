@@ -29,7 +29,7 @@ export interface TableColumn<TRow = unknown> {
 }
 
 export interface AuthUser {
-    id: number;
+    id: string;
     name: string;
     email: string;
 }

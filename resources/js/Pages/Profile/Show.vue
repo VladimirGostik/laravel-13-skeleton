@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import AppLayout from '@/Layouts/AppLayout.vue';
-import Header from '@/Layouts/Header.vue';
+import Header from '@/Components/Header.vue';
 import { useForm, usePage } from '@inertiajs/vue3';
 import { useTranslate } from '@/Composables/useTranslate';
 import { computed } from 'vue';
+
+defineOptions({ layout: AppLayout });
 
 const t = useTranslate();
 const page = usePage();
@@ -14,7 +16,7 @@ const languages = computed(
 );
 
 const props = defineProps<{
-    user: { id: number; name: string; email: string; locale: string };
+    user: { id: string; name: string; email: string; locale: string };
 }>();
 
 const profile = useForm({
@@ -41,10 +43,9 @@ function savePassword() {
 </script>
 
 <template>
-    <AppLayout>
-        <Header :title="t('profile')" />
+    <Header :title="t('profile')" />
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div class="card bg-base-100 border border-base-300">
                 <div class="card-body">
                     <h2 class="card-title">{{ t('profile_settings') }}</h2>
@@ -98,6 +99,5 @@ function savePassword() {
                     </form>
                 </div>
             </div>
-        </div>
-    </AppLayout>
+    </div>
 </template>

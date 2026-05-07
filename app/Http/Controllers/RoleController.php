@@ -10,7 +10,6 @@ use App\Data\Roles\RoleStoreData;
 use App\Data\Roles\RoleUpdateData;
 use App\Models\Role;
 use App\Services\RoleService;
-use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
@@ -99,13 +98,5 @@ final class RoleController extends Controller implements HasMiddleware
         }
 
         return redirect()->route('roles.index')->with('flash.success', __('app.role_deleted'));
-    }
-
-    private function authorize(string $ability, mixed $arguments = []): void
-    {
-        $user = auth()->user();
-        if ($user === null || ! $user->can($ability, $arguments)) {
-            throw new AuthorizationException;
-        }
     }
 }

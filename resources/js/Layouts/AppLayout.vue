@@ -1,12 +1,21 @@
 <script setup lang="ts">
-import { computed, onMounted, onBeforeUnmount, watch } from 'vue';
+import { computed, onMounted, onBeforeUnmount, watch, reactive } from 'vue';
 import { Link, router, usePage } from '@inertiajs/vue3';
 import { useTranslate } from '@/Composables/useTranslate';
 import type { ToastType } from '@/Composables/useToast';
-import { reactive } from 'vue';
+import type { AuthUser, CanMap, FlashBag, LanguageOption } from '@/types';
+
+interface SharedPageProps {
+    auth: { user: AuthUser | null };
+    languages: LanguageOption[];
+    locale: string;
+    can: CanMap;
+    flash: FlashBag;
+    [key: string]: unknown;
+}
 
 const t = useTranslate();
-const page = usePage();
+const page = usePage<SharedPageProps>();
 
 interface NavItem {
     label: string;
@@ -15,7 +24,7 @@ interface NavItem {
 }
 
 const navItems = computed<NavItem[]>(() => {
-    const can = (page.props as unknown as SharedProps).can ?? {};
+    const can = page.props.can ?? {};
     return [
         { label: t('dashboard'), href: route('dashboard'), visible: true },
         { label: t('users'), href: route('users.index'), visible: !!can.viewUsers },
@@ -24,17 +33,9 @@ const navItems = computed<NavItem[]>(() => {
     ];
 });
 
-interface SharedProps {
-    auth: { user: { id: number; name: string; email: string } | null };
-    languages: Array<{ code: string; name: string; flag: string }>;
-    locale: string;
-    can: Record<string, boolean>;
-    flash: { success?: string | null; error?: string | null; info?: string | null; status?: string | null };
-}
-
-const user = computed(() => (page.props as unknown as SharedProps).auth?.user ?? null);
-const languages = computed(() => (page.props as unknown as SharedProps).languages ?? []);
-const currentLocale = computed(() => (page.props as unknown as SharedProps).locale ?? 'sk');
+const user = computed(() => page.props.auth?.user ?? null);
+const languages = computed(() => page.props.languages ?? []);
+const currentLocale = computed(() => page.props.locale ?? 'sk');
 
 interface Toast {
     id: number;
@@ -60,7 +61,7 @@ function onAppToast(e: Event) {
 }
 
 watch(
-    () => (page.props as unknown as SharedProps).flash,
+    () => page.props.flash,
     (flash) => {
         if (!flash) return;
         if (flash.success) pushToast(flash.success, 'success');

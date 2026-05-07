@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
@@ -12,6 +13,7 @@ use Spatie\Permission\Models\Role as SpatieRole;
 
 final class Role extends SpatieRole
 {
+    use HasUuids;
     use LogsActivity;
 
     public function getActivitylogOptions(): LogOptions

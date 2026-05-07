@@ -14,7 +14,7 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 final class UserListItemData extends Data
 {
     public function __construct(
-        public int $id,
+        public string $id,
         public string $name,
         public string $email,
         public ?string $role,
@@ -30,7 +30,7 @@ final class UserListItemData extends Data
         $actor = auth()->user();
 
         return new self(
-            id: (int) $user->getKey(),
+            id: (string) $user->getKey(),
             name: $user->name,
             email: $user->email,
             role: $user->getRoleNames()->first(),

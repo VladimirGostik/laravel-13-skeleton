@@ -13,7 +13,7 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 final class RoleListItemData extends Data
 {
     public function __construct(
-        public int $id,
+        public string $id,
         public string $name,
         public int $users_count,
         public int $permissions_count,
@@ -29,7 +29,7 @@ final class RoleListItemData extends Data
         $isSystem = in_array($role->name, ['admin'], true);
 
         return new self(
-            id: (int) $role->getKey(),
+            id: (string) $role->getKey(),
             name: $role->name,
             users_count: (int) ($role->users_count ?? $role->users()->count()),
             permissions_count: (int) ($role->permissions_count ?? $role->permissions()->count()),

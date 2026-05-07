@@ -7,7 +7,6 @@ namespace App\Http\Controllers;
 use App\Data\AuditLogs\ActivityLogDetailData;
 use App\Data\AuditLogs\ActivityLogIndexFilterData;
 use App\Data\AuditLogs\ActivityLogListItemData;
-use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
@@ -26,7 +25,7 @@ final class AuditLogController extends Controller implements HasMiddleware
 
     public function index(ActivityLogIndexFilterData $filters): Response
     {
-        $this->authorize();
+        $this->authorize('viewAny', Activity::class);
 
         $op = config('database.default') === 'pgsql' ? 'ilike' : 'like';
 
@@ -58,18 +57,10 @@ final class AuditLogController extends Controller implements HasMiddleware
 
     public function show(Activity $activity): Response
     {
-        $this->authorize();
+        $this->authorize('viewAny', Activity::class);
 
         return Inertia::render('AuditLogs/Show', [
             'log' => ActivityLogDetailData::fromModel($activity->load('causer')),
         ]);
-    }
-
-    private function authorize(): void
-    {
-        $user = auth()->user();
-        if ($user === null || ! $user->can('view audit logs')) {
-            throw new AuthorizationException;
-        }
     }
 }

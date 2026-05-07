@@ -14,12 +14,10 @@ parameters:
         - identifier: argument.type
           path: app/Http/Controllers/*Controller.php
         - identifier: argument.type
+          path: app/Services/UserService.php
+        - identifier: argument.type
           path: app/Listeners/LogAuthenticationActivity.php
         - identifier: property.notFound
           path: app/Data/AuditLogs/*.php
-        - identifier: instanceof.alwaysFalse
-          path: app/Data/Users/UserDetailData.php
-        - identifier: trait.unused
-          path: app/Concerns/HasUuids.php
         - identifier: generics.wrongParent
           path: app/Models/User.php
